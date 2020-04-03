@@ -12,7 +12,18 @@ namespace top.riverelder.RiverCommand {
     public class CmdDispatcher<TEnv> {
 
         private Dictionary<string, string> aliases = new Dictionary<string, string>();
-        private Dictionary<string, CommandNode<TEnv>> commands = new Dictionary<string, CommandNode<TEnv>>();
+        private Dictionary<string, LiteralCommandNode<TEnv>> commands = new Dictionary<string, LiteralCommandNode<TEnv>>();
+
+        public ICollection<LiteralCommandNode<TEnv>> Commands => commands.Values;
+
+        public LiteralCommandNode<TEnv> this[string head] {
+            get {
+                if (commands.TryGetValue(head, out LiteralCommandNode<TEnv> cmd)) {
+                    return cmd;
+                }
+                return null;
+            }
+        }
 
         public void Register(ICmdEntry<TEnv> cmd) {
             cmd.OnRegister(this);
@@ -38,7 +49,7 @@ namespace top.riverelder.RiverCommand {
             index = m.Success ? m.Index : raw.Length;
             string head = raw.Substring(0, index);
             //string body = raw.Substring(index + (m.Success ? m.Value.Length : 0));
-            if (commands.TryGetValue(head, out CommandNode<TEnv> node)) {
+            if (commands.TryGetValue(head, out LiteralCommandNode<TEnv> node)) {
                 return node.Dispatch(raw, env, new Args(), out reply) == DispatchResult.MatchedAll;
             } else {
                 reply = "未知指令：" + head;
