@@ -4,9 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RiverCommand {
-    class Program {
-        static void Main(string[] args) {
-        }
+namespace top.riverelder.RiverCommand.Test {
+    class TestEnv {
     }
 }
