@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -129,11 +130,34 @@ namespace top.riverelder.RiverCommand {
             return this;
         }
 
+        /// <summary>
+        /// 获取帮助字符串
+        /// </summary>
+        /// <returns></returns>
+        public List<string> GetHelp() {
+            List<string> ret = new List<string>();
+            string self = Help;
+            if (Executor != null) {
+                ret.Add(self);
+            }
+            foreach (CommandNode<TEnv> child in Children) {
+                List<string> childHelp = child.GetHelp();
+                foreach (string s in childHelp) {
+                    ret.Add(self + " " + s);
+                }
+            }
+            return ret;
+        }
 
         /// <summary>
         /// 该参数的类型提示信息
         /// </summary>
         public abstract string Tip { get; }
+
+        /// <summary>
+        /// 获取帮助信息
+        /// </summary>
+        public virtual string Help => $"<{ParamName}>";
 
         /// <summary>
         /// 解析自身节点的参数

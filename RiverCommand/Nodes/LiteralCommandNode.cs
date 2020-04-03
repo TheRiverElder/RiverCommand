@@ -10,6 +10,8 @@ namespace top.riverelder.RiverCommand.Nodes {
 
         public override string Tip => Value;
 
+        public override string Help => Value;
+        
         public LiteralCommandNode(string value) {
             Value = value;
         }

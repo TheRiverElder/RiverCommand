@@ -30,7 +30,7 @@ namespace top.riverelder.RiverCommand.Nodes {
             if (m.Groups[2].Success) {
                 result = m.Groups[2].Value.Replace("\\\"", "\"");
             } else if (m.Groups[3].Success) {
-                result = m.Groups[3];
+                result = m.Groups[3].Value;
             } else {
                 result = m.Value;
             }

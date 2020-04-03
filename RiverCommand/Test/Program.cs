@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using top.riverelder.RiverCommand.Nodes;
 
 namespace top.riverelder.RiverCommand.Test {
     class Program {
@@ -10,7 +11,9 @@ namespace top.riverelder.RiverCommand.Test {
         static CmdDispatcher<TestEnv> dispatcher = new CmdDispatcher<TestEnv>();
 
         static void Main(string[] args) {
-            dispatcher.Register(new Cmd_Item());
+            ICmdEntry<TestEnv> cmd = new Cmd_Item();
+            dispatcher.Register(cmd);
+            
 
             Test("物品 创造 UltraSward");
             Test("物品 销毁 UltraSward");

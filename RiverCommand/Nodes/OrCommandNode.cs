@@ -16,6 +16,8 @@ namespace top.riverelder.RiverCommand.Nodes {
 
         public override string Tip { get; }
 
+        public override string Help => Tip;
+
         public override bool Parse(string raw, out object result, out int length, out string err) {
             foreach (string id in ValidValues) {
                 if (raw.StartsWith(id)) {
