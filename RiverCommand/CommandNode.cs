@@ -130,7 +130,7 @@ namespace top.riverelder.RiverCommand {
         private CommandNode<TEnv>[] GetRevelentNodes(StringReader reader) {
             int start = reader.Cursor;
             reader.SkipWhiteSpace();
-            string literal = reader.HasNext ? reader.ReadToWhiteSpace() : null;
+            string literal = reader.HasNext ? reader.ReadToWhiteSpaceOr(DictArgSeperators) : null;
             reader.Cursor = start;
             if (!string.IsNullOrEmpty(literal) && certainChuldren.TryGetValue(literal, out CommandNode<TEnv> node)) {
                 return new CommandNode<TEnv>[] { node };
