@@ -45,13 +45,13 @@
     <Compile Include="Args.cs" />
     <Compile Include="CommandNode.cs" />
     <Compile Include="CmdDispatcher.cs" />
+    <Compile Include="DictMapper.cs" />
     <Compile Include="ICmdEntry.cs" />
     <Compile Include="Handler.cs" />
-    <Compile Include="Nodes\AnyCommandNode.cs" />
-    <Compile Include="Nodes\IntCommandNode.cs" />
-    <Compile Include="Nodes\LiteralCommandNode.cs" />
-    <Compile Include="Nodes\OrCommandNode.cs" />
-    <Compile Include="Nodes\RestCommandNode.cs" />
+    <Compile Include="ParamParsers\IntParser.cs" />
+    <Compile Include="ParamParsers\ParamParser.cs" />
+    <Compile Include="ParamParsers\LiteralParser.cs" />
+    <Compile Include="ParamParsers\StringParser.cs" />
     <Compile Include="PresetNodes.cs" />
     <Compile Include="Test\Cmd_Item.cs" />
     <Compile Include="Test\Program.cs" />
@@ -59,9 +59,13 @@
     <Compile Include="Test\TestEnv.cs" />
     <Compile Include="Utils\DispatchResult.cs" />
     <Compile Include="Utils\NumberType.cs" />
+    <Compile Include="Utils\StringReader.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Nodes\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using top.riverelder.RiverCommand.Nodes;
 using top.riverelder.RiverCommand.Utils;
 
 namespace top.riverelder.RiverCommand {
@@ -12,13 +11,13 @@ namespace top.riverelder.RiverCommand {
     public class CmdDispatcher<TEnv> {
 
         private Dictionary<string, string> aliases = new Dictionary<string, string>();
-        private Dictionary<string, LiteralCommandNode<TEnv>> commands = new Dictionary<string, LiteralCommandNode<TEnv>>();
+        private Dictionary<string, CommandNode<TEnv>> commands = new Dictionary<string, CommandNode<TEnv>>();
 
-        public ICollection<LiteralCommandNode<TEnv>> Commands => commands.Values;
+        public ICollection<CommandNode<TEnv>> Commands => commands.Values;
 
-        public LiteralCommandNode<TEnv> this[string head] {
+        public CommandNode<TEnv> this[string head] {
             get {
-                if (commands.TryGetValue(head, out LiteralCommandNode<TEnv> cmd)) {
+                if (commands.TryGetValue(head, out CommandNode<TEnv> cmd)) {
                     return cmd;
                 }
                 return null;
@@ -29,8 +28,12 @@ namespace top.riverelder.RiverCommand {
             cmd.OnRegister(this);
         }
 
-        public void Register(LiteralCommandNode<TEnv> root) {
-            commands[root.Value] = root;
+        public void Register(string head, params CommandNode<TEnv>[] nodes) {
+            CommandNode<TEnv> n = PresetNodes.Literal<TEnv>(head);
+            foreach (CommandNode<TEnv> node in nodes) {
+                n.AddChild(node);
+            }
+            commands[head] = n;
         }
 
         public void SetAlias(string alias, string replacement) {
@@ -38,19 +41,18 @@ namespace top.riverelder.RiverCommand {
         }
 
         public bool Dispatch(string raw, TEnv env, out string reply) {
-            raw = Regex.Replace(raw, @"^\s+", "");
-            Match m = Regex.Match(raw, @"\s+");
-            int index = m.Success ? m.Index : raw.Length;
-            string alias = raw.Substring(0, index);
+            raw = raw.TrimStart();
+            StringReader reader = new StringReader(raw);
+            reader.SkipWhiteSpace();
+            string alias = reader.ReadToWhiteSpace();
             if (aliases.TryGetValue(alias, out string act)) {
-                raw = act + raw.Substring(index);
+                reader = new StringReader(act + reader.ReadRest());
             }
-            m = Regex.Match(raw, @"\s+");
-            index = m.Success ? m.Index : raw.Length;
-            string head = raw.Substring(0, index);
-            //string body = raw.Substring(index + (m.Success ? m.Value.Length : 0));
-            if (commands.TryGetValue(head, out LiteralCommandNode<TEnv> node)) {
-                return node.Dispatch(raw, env, new Args(), out reply) == DispatchResult.MatchedAll;
+            reader.Cursor = 0;
+            string head = reader.ReadToWhiteSpace();
+            reader.Cursor = 0;
+            if (commands.TryGetValue(head, out CommandNode<TEnv> node)) {
+                return node.Dispatch(reader, env, new Args(), out reply) == DispatchResult.MatchedAll;
             } else {
                 reply = "未知指令：" + head;
                 return false;

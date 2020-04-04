@@ -5,6 +5,6 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace top.riverelder.RiverCommand {
-    public delegate string CmdExecutor<TEnv>(TEnv env, Args args);
+    public delegate string CmdExecutor<TEnv>(TEnv env, Args args, Args dict);
     public delegate bool PreProcess<TEnv>(TEnv env, Args args, out object arg);
 }

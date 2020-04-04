@@ -1,9 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using top.riverelder.RiverCommand.Nodes;
 
 namespace top.riverelder.RiverCommand.Test {
     class Program {
@@ -15,22 +10,36 @@ namespace top.riverelder.RiverCommand.Test {
             dispatcher.Register(cmd);
             
 
-            Test("物品 创造 UltraSward");
-            Test("物品 销毁 UltraSward");
-            Test("物品 UltraSward");
-            Test("物品 创造");
-            Test("物品 销毁");
-            Test("创造 UltraSward");
-            Test("sth 创造 UltraSward");
-            Test("物品");
-            Test("物品 编辑 UltraSward");
-            Test("物品 编辑");
+            //Test("物品 创造 UltraSward");
+            //Test("物品 销毁 UltraSward");
+            //Test("物品 UltraSward");
+            //Test("物品 创造");
+            //Test("物品 销毁");
+            //Test("创造 UltraSward");
+            //Test("sth 创造 UltraSward");
+            //Test("物品");
+            //Test("物品 编辑 UltraSward");
+            //Test("物品 编辑");
+
+            string buffer = "";
+            while (true) {
+                string s = Console.ReadLine();
+                if (s.StartsWith(".")) {
+                    break;
+                }
+                if (string.IsNullOrEmpty(s)) {
+                    Test(buffer);
+                    buffer = "";
+                } else {
+                    buffer += '\n' + s;
+                }
+            }
             Console.ReadKey();
         }
 
         static void Test(string s) {
             Console.WriteLine("运行：" + s);
-            Console.Write("运行：");
+            Console.Write("结果：");
             if (dispatcher.Dispatch(s, env, out string reply)) {
                 Console.ForegroundColor = ConsoleColor.Green;
                 Console.WriteLine("成功");

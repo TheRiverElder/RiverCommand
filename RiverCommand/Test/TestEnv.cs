@@ -6,5 +6,6 @@ using System.Threading.Tasks;
 
 namespace top.riverelder.RiverCommand.Test {
     class TestEnv {
+        public HashSet<string> Items = new HashSet<string>();
     }
 }
